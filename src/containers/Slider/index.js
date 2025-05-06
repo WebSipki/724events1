@@ -6,52 +6,50 @@ import "./style.scss";
 
 const Slider = () => {
   const { data } = useData();
-  const [index, setIndex] = useState(0);
-  const byDateDesc = data?.focus.sort((evtA, evtB) =>
-    new Date(evtA.date) < new Date(evtB.date) ? -1 : 1
-  );
-  const nextCard = () => {
-    setTimeout(
-      () => setIndex(index < byDateDesc.length ? index + 1 : 0),
-      5000
-    );
-  };
+  const [index, setIndex] = useState(0);// Le setIndex ne dépasse plus les bornes → plus de page blanche.
+  // Tri du plus ancien au plus récent
+  const byDateAsc = data?.focus 
+    .slice()
+    .sort((A, B) => new Date(A.date) - new Date(B.date));
+
   useEffect(() => {
-    nextCard();
-  });
+    const timer = setTimeout(() => {
+      setIndex((prevIndex) => prevIndex < byDateAsc.length - 1 ? prevIndex + 1 : 0);
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, [index, byDateAsc]);
+
   return (
     <div className="SlideCardList">
-      {byDateDesc?.map((event, idx) => (
-        <>
+      {byDateAsc?.map((evt) => (
           <div
-            key={event.title}
-            className={`SlideCard SlideCard--${
-              index === idx ? "display" : "hide"
-            }`}
+            key={`${evt.title}-${evt.date}`}
+            className={`SlideCard SlideCard--${index === byDateAsc.indexOf(evt) ? "display" : "hide"}`}
           >
-            <img src={event.cover} alt="forum" />
+            <img src={evt.cover} alt="forum" />
             <div className="SlideCard__descriptionContainer">
               <div className="SlideCard__description">
-                <h3>{event.title}</h3>
-                <p>{event.description}</p>
-                <div>{getMonth(new Date(event.date))}</div>
+                <h3>{evt.title}</h3>
+                <p>{evt.description}</p>
+                <div>{getMonth(new Date(evt.date))}</div>
               </div>
             </div>
           </div>
+          ))}
+               
           <div className="SlideCard__paginationContainer">
             <div className="SlideCard__pagination">
-              {byDateDesc.map((_, radioIdx) => (
+              {byDateAsc?.map((evt) => (
                 <input
-                  key={`${event.id}`}
+                  key={`radio-${evt.title}-${evt.date}`}
                   type="radio"
                   name="radio-button"
-                  checked={idx === radioIdx}
+                  checked={index === byDateAsc.indexOf(evt)}
+                  readOnly
                 />
               ))}
             </div>
           </div>
-        </>
-      ))}
     </div>
   );
 };

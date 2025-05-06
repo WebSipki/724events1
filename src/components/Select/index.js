@@ -15,10 +15,11 @@ const Select = ({
 }) => {
   const [value, setValue] = useState();
   const [collapsed, setCollapsed] = useState(true);
+
   const changeValue = (newValue) => {
-    onChange();
-    setValue(newValue);
-    setCollapsed(newValue);
+    onChange(newValue);// ✅ On passe bien la valeur sélectionnée
+    setValue(newValue);// ✅ On l'enregistre en local
+    setCollapsed(true);// ✅ On replie la liste
   };
   return (
     <div className={`SelectContainer ${type}`} data-testid="select-testid">
