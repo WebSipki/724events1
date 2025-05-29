@@ -120,7 +120,7 @@ const Page = () => {
         
         <EventCard
           imageSrc={last?.cover || "/images/default-cover.jpg"}
-          title={last?.title }
+          title={last?.title || "Titre indisponible"}
           date={last?.date ? new Date(last.date) : new Date()}
           small
           label="boom"

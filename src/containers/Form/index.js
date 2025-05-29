@@ -3,8 +3,10 @@ import PropTypes from "prop-types";
 import Field, { FIELD_TYPES } from "../../components/Field";
 import Select from "../../components/Select";
 import Button, { BUTTON_TYPES } from "../../components/Button";
+import mockContactApi from "../../api/contact";
 
-const mockContactApi = () => new Promise((resolve) => { setTimeout(resolve, 500); })
+
+
 
 const Form = ({ onSuccess, onError }) => {
   const [sending, setSending] = useState(false);
@@ -18,19 +20,26 @@ const Form = ({ onSuccess, onError }) => {
     async (evt) => {
       evt.preventDefault();
       setSending(true);
+      setMessageSent(false); // ← Ajout important : réinitialiser l'état de succès
+      setErrorMessage(""); // Réinitialiser le message d’erreur à chaque tentative
+
+
 
       const formData = new FormData(formRef.current);
       const nom = formData.get("Nom");
       const prenom = formData.get("Prénom");
       const email = formData.get("Email");
       const message = formData.get("Message");
-      const selection = formData.get("Personel / Entreprise");
+      const selection = formData.get("Personnel / Entreprise");
 
      if (!nom || !prenom || !email || !message || !selection) {
       setErrorMessage("❌ Tous les champs doivent être remplis !");
        setSending(false);
+       setMessageSent(false); // ← S’assurer que le message de succès disparaît
        return;
      }
+
+
 
      setErrorMessage(""); // Réinitialiser le message s’il n’y a pas d’erreur
      // Appel à l'API
@@ -58,16 +67,17 @@ const Form = ({ onSuccess, onError }) => {
           <Field 
              name="Prénom" placeholder="" label="Prénom"/>
           <Select
-            name="Personel / Entreprise"
-            selection={["Personel", "Entreprise"]}
+          
+           name="Personnel / Entreprise"
+            selection={["Personnel", "Entreprise"]}
             onChange={() => null}
-            label="Personel / Entreprise"
+            label="Personnel / Entreprise"
             type="large"
             titleEmpty
           />
           <Field 
               name="Email"placeholder="" label="Email" />
-          <Button type={BUTTON_TYPES.SUBMIT} disabled={sending}>
+          <Button type={BUTTON_TYPES.SUBMIT} disabled={sending}data-testid="button-test-id">
             {sending ? "En cours" : "Envoyer"}
           </Button>
         </div>

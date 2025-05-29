@@ -16,41 +16,55 @@ const Select = ({
   const [value, setValue] = useState();
   const [collapsed, setCollapsed] = useState(true);
 
+  
+
   const changeValue = (newValue) => {
-    onChange(newValue);// ✅ On passe bien la valeur sélectionnée
-    setValue(newValue);// ✅ On l'enregistre en local
-    setCollapsed(true);// ✅ On replie la liste
+    onChange(newValue);// On passe bien la valeur sélectionnée
+    setValue(newValue);// On l'enregistre en local
+    setCollapsed(true);// On replie la liste
   };
   return (
     <div className={`SelectContainer ${type}`} data-testid="select-testid">
-      {label && <div className="label">{label}</div>}
+      {label && <label htmlFor={name} className="label">{label}</label>}
       <div className="Select">
         <ul>
-          <li className={collapsed ? "SelectTitle--show" : "SelectTitle--hide"}>
+          <li
+  className={collapsed ? "SelectTitle--show" : "SelectTitle--hide"}
+  onClick={() => setCollapsed(!collapsed)}
+>
             {value || (!titleEmpty && "Toutes")}
           </li>
           {!collapsed && (
             <>
               {!titleEmpty && (
-                <li onClick={() => changeValue(null)}>
-                  <input defaultChecked={!value} name="selected" type="radio" />{" "}
-                  Toutes
+                <li onClick={() => changeValue(null)} role="option" aria-selected={!value}>
+                  <label htmlFor={`${name}-all`}>
+                  <input
+                    defaultChecked={!value}
+                    name="selected"
+                    type="radio"
+                    id={`${name}-all`} 
+                    />
+                   Toutes
+                   </label>
                 </li>
               )}
               {selection.map((s) => (
-                <li key={s} onClick={() => changeValue(s)}>
+                <li key={s}
+                onClick={() => changeValue(s)} role="option" aria-selected={value === s}>
                   <input
                     defaultChecked={value === s}
                     name="selected"
                     type="radio"
-                  />{" "}
-                  {s}
+                    id={`${name}-${s}`}
+                    />
+                   <label htmlFor={`${name}-${s}`}>{s}</label>
                 </li>
               ))}
             </>
           )}
         </ul>
-        <input type="hidden" value={value || ""} name={name} />
+        <input type="hidden" value={value || ""} name={name} id={name} />
         <button
           type="button"
           data-testid="collapse-button-testid"
@@ -59,6 +73,7 @@ const Select = ({
             e.preventDefault();
             setCollapsed(!collapsed);
           }}
+          aria-label="Afficher ou masquer les options"
         >
           <Arrow />
         </button>
