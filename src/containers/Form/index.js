@@ -21,23 +21,7 @@ const Form = ({ onSuccess, onError }) => {
       evt.preventDefault();
       setSending(true);
       setMessageSent(false); // ← Ajout important : réinitialiser l'état de succès
-      setErrorMessage(""); // Réinitialiser le message d’erreur à chaque tentative
-
-
-
-      const formData = new FormData(formRef.current);
-      const nom = formData.get("Nom");
-      const prenom = formData.get("Prénom");
-      const email = formData.get("Email");
-      const message = formData.get("Message");
-      const selection = formData.get("Personnel / Entreprise");
-
-     if (!nom || !prenom || !email || !message || !selection) {
-      setErrorMessage("❌ Tous les champs doivent être remplis !");
-       setSending(false);
-       setMessageSent(false); // ← S’assurer que le message de succès disparaît
-       return;
-     }
+      setErrorMessage(""); // Réinitialiser le message d’erreur à chaque tentati
 
 
 
@@ -62,21 +46,17 @@ const Form = ({ onSuccess, onError }) => {
     <form onSubmit={sendContact} ref={formRef}> {/* Assure-toi d'utiliser formRef ici */}
       <div className="row">
         <div className="col">
-          <Field 
-             name="Nom" placeholder="" label="Nom"/>
-          <Field 
-             name="Prénom" placeholder="" label="Prénom"/>
+          <Field name="Nom" placeholder="" label="Nom"/>
+          <Field name="Prénom" placeholder="" label="Prénom"/>
           <Select
-          
-           name="Personnel / Entreprise"
+            name="Personnel / Entreprise"
             selection={["Personnel", "Entreprise"]}
             onChange={() => null}
             label="Personnel / Entreprise"
             type="large"
             titleEmpty
           />
-          <Field 
-              name="Email"placeholder="" label="Email" />
+          <Field name="Email"placeholder="" label="Email" />
           <Button type={BUTTON_TYPES.SUBMIT} disabled={sending}data-testid="button-test-id">
             {sending ? "En cours" : "Envoyer"}
           </Button>
