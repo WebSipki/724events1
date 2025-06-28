@@ -10,11 +10,13 @@ const Slider = () => {
   // Tri du plus ancien au plus récent
   const byDateAsc = data?.focus 
     .slice()
-    .sort((A, B) => new Date(A.date) - new Date(B.date));
+    .sort((A, B) =>
+       new Date(A.date) - new Date(B.date));
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setIndex((prevIndex) => prevIndex < byDateAsc.length - 1 ? prevIndex + 1 : 0);
+      setIndex((prevIndex) => 
+        prevIndex < byDateAsc.length - 1 ? prevIndex + 1 : 0);
     }, 5000);
     return () => clearTimeout(timer);
   }, [index, byDateAsc]);

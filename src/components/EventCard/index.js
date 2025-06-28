@@ -21,15 +21,14 @@ const EventCard = ({
       {...props}
     >
       <div className="EventCard__imageContainer">
-      <img
-  data-testid="card-image-testid"
-  src={imageSrc}
-  alt={imageAlt}
-  onError={(e) => {
-    e.target.onerror = null;
-    e.target.src = "/images/charlesdeluvio-wn7dOzUh3Rs-unsplash.png";
-  }}
-/>
+      <img data-testid="card-image-testid" 
+        src={imageSrc} 
+        alt={imageAlt} 
+        onError={(e) => {
+        e.target.onerror = null;
+        e.target.src = "/images/charlesdeluvio-wn7dOzUh3Rs-unsplash.png";
+      }}
+    />
         <div className="EventCard__label">{label}</div>
       </div>
       <div className="EventCard__descriptionContainer">
